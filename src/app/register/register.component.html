@@ -1,0 +1,81 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>
+            <h4 class="mat-h4">Register</h4>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <form [formGroup]="registrationForm" (ngSubmit)="OnSubmit()">
+            <div class="row">
+                <mat-form-field appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="Name" formControlName="name"/>
+                    <mat-icon matSuffix>account_box</mat-icon>
+                </mat-form-field>
+                
+                <mat-form-field appearance="outline">
+                    <mat-label>Email</mat-label>
+                    <input matInput placeholder="Email" formControlName="email"/>
+                    <mat-icon matSuffix>email</mat-icon>
+                </mat-form-field>
+            </div>
+
+            <div class="row password-row">
+                <mat-form-field appearance="outline">
+                    <mat-label>Password</mat-label>
+                    <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'" formControlName="password" />
+                    <mat-icon matSuffix>lock</mat-icon>
+                </mat-form-field>
+                
+                <!-- <mat-form-field appearance="outline">
+                    <mat-label>Enter your password</mat-label>
+                    <input matInput [type]="hide ? 'password' : 'text'" placeholder="Confirm Password" formControlName="password" />
+                    <mat-icon matSuffix>lock</mat-icon>
+                </mat-form-field> -->
+            </div>
+
+            <div class="row">
+                <mat-checkbox mat-checkbox class="password-checkbox" (change)="hide = !hide">Show Password</mat-checkbox>
+            </div>
+
+            <div class="row">
+                <mat-form-field appearance="outline">
+                    <mat-label>Education</mat-label>
+                    <mat-select placeholder="Education" formControlName="education">
+                        <mat-option *ngFor="let education of educations" [value]="education.value">
+                            {{education.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Company</mat-label>
+                    <input matInput placeholder="Company" formControlName="company"/>
+                    <mat-icon matSuffix>business</mat-icon>
+                </mat-form-field>
+            </div>
+
+            <div class="row">
+                <mat-form-field appearance="outline">
+                    <mat-label>Date of Birth</mat-label>
+                    <input matInput [matDatepicker]="picker" placeholder="Choose a date" formControlName="dob">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+            </div>
+
+            <div class="row">
+                <mat-radio-group aria-label="Gender" formControlName="gender">
+                    <mat-radio-button value="Male">Male</mat-radio-button>
+                    <mat-radio-button value="Female">Female</mat-radio-button>
+                </mat-radio-group>
+            </div>
+
+            <div class="row">
+                <button mat-raised-button color="primary" type="submit">Register</button>
+                <a mat-raised-button color="accent" routerLink="/login">Cancel</a>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

@@ -1,0 +1,23 @@
+.mat-h4{
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.row{
+    display: flex;
+    gap: 10px;
+}
+
+mat-form-field{
+    width: 100%;
+}
+
+.password-checkbox{
+    margin-top: -1rem;
+    margin-bottom: 1rem;
+}
+
+.row button{
+    width: 100%;
+}
