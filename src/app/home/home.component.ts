@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { AuthService } from '../service/auth.service';
 import { ToastrService } from 'ngx-toastr';
-import { HttpClient } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 
 @Component({
@@ -23,7 +22,6 @@ export class HomeComponent implements OnInit {
     private toastr: ToastrService, 
     private authService: AuthService, 
     private router: Router,
-    private http: HttpClient,
     private cookieService: CookieService
     ) {
     if (!this.authService.isLoggedIn()) {
@@ -32,12 +30,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.http.get('http://localhost:8085/api/auth/user', {
-      withCredentials: true,
-      headers: {
-        'Authorization': `Bearer ${this.cookieService.get('token')}`
-      }
-    }).subscribe({
+    this.authService.getUserDetails().subscribe({
       next: (res: any) => {
         this.userDetails = res.data;
         console.log(res);
@@ -47,22 +40,10 @@ export class HomeComponent implements OnInit {
         console.log(error);
       }
     });
-    // this.authService.getUserDetails().subscribe({
-    //   next: (res: any) => {
-    //     this.userDetails = res.data;
-    //     console.log(res);
-    //   },
-    //   error: (error: any) => {
-    //     this.toastr.error(error.message + ' Please login again');
-    //     console.log(error);
-    //   }
-    // })
   }
 
   OnLogout() {
-    this.http.post('http://localhost:8085/api/auth/logout', {}, {
-      withCredentials: true 
-    }).subscribe({
+    this.authService.Logout().subscribe({
       next: (res: any) => {
         this.cookieService.delete('token');
         this.toastr.success(res.message);

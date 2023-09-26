@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../service/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from "@angular/router";
 import { CookieService } from 'ngx-cookie-service';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -14,15 +13,13 @@ import { HttpClient } from '@angular/common/http';
 export class LoginComponent implements OnInit {
 
   hide = true;
-  loginForm: FormGroup | undefined;
+  loginForm?: FormGroup;
 
   constructor(
-    private fb: FormBuilder, 
     private authService: AuthService, 
     private toastr: ToastrService, 
     private router: Router, 
     private cookieService: CookieService,
-    private http: HttpClient
     ) {
     if (this.authService.isLoggedIn()) {
       this.router.navigate(['/']);
@@ -30,25 +27,26 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loginForm = this.fb.group({
-      email: [null, Validators.compose([Validators.required, Validators.email])],
-      password: [null, Validators.compose([Validators.required])]
+    this.loginForm = new FormGroup({
+      email: new FormControl(null, [Validators.required, Validators.email]),
+      password: new FormControl(null, [
+        Validators.required, 
+        Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&]).{8,}')
+      ])
     });
   }
 
   OnSubmit():void {
-    this.http.post('http://localhost:8085/api/auth/login', this.loginForm?.value, {
-      withCredentials: true 
-    }).subscribe({
+    this.authService.Login(this.loginForm?.value).subscribe({
       next: (res: any) => {
         this.cookieService.set('token', res.token);
         this.toastr.success(res.message);
         console.log(res);
         this.router.navigate(['/']);
       },
-      error: (error: any) => {
-        this.toastr.error(error.message);
-        console.log(error);
+      error: (e: any) => {
+        this.toastr.error(e.error.message);
+        console.log(e);
       }
     })
   }

@@ -8,18 +8,25 @@ import { CookieService } from 'ngx-cookie-service';
 export class AuthService {
   apiUrl = 'http://localhost:8085/api/auth';
 
-  constructor(private http:HttpClient, private cookieService: CookieService) { }
+  constructor(
+    private http:HttpClient, 
+    private cookieService: CookieService
+    ) {}
 
   Login(data:any){
-    return this.http.post(`${this.apiUrl}/login`,data);
+    return this.http.post(`${this.apiUrl}/login`, data, {
+      withCredentials: true 
+    });
   }
 
   Register(data:any){
-    return this.http.post(`${this.apiUrl}/register`,data);
+    return this.http.post(`${this.apiUrl}/register`, data);
   }
   
   Logout(){
-    return this.cookieService.delete('token');
+    return this.http.post(`${this.apiUrl}/logout`, {}, {
+      withCredentials: true 
+    });
   }
 
   isLoggedIn(){
@@ -27,14 +34,8 @@ export class AuthService {
   }
 
   getUserDetails(){
-    // check if the cookie matches the token in the cookie
-    // if it matches, return the user details
-    // else return null
     return this.http.get(`${this.apiUrl}/user`,{
-      withCredentials: true,
-      headers: {
-        'Authorization': `Bearer ${this.cookieService.get('token')}`
-      }
+      withCredentials: true
     });
   }
 }
