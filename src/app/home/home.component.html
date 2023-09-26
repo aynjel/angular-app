@@ -1,6 +1,8 @@
-<p>
-    {{userDetails.email}}
-</p>
+<pre *ngIf="userDetails">
+    {{ userDetails.name }}
+    {{ userDetails.email }}
+    {{ userDetails.education }}
+</pre>
 
 <button mat-raised-button color="primary" (click)="OnLogout()">Log Out</button>
 

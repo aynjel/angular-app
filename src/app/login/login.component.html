@@ -5,7 +5,7 @@
         </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <form [formGroup]="loginForm" (ngSubmit)="OnSubmit()">
+        <form [formGroup]="loginForm!" (ngSubmit)="OnSubmit()">
             <div class="row">
                 <mat-form-field appearance="outline">
                     <mat-label>Email</mat-label>
@@ -22,9 +22,9 @@
                 </mat-form-field>
             </div>
 
-            <div class="row">
+            <div class="row-buttons">
                 <button mat-raised-button color="primary" type="submit">Login</button>
-                <a mat-raised-button color="accent" routerLink="/register">Register</a>
+                <a routerLink="/register">Register</a>
             </div>
         </form>
     </mat-card-content>

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,7 @@ import { Injectable } from '@angular/core';
 export class AuthService {
   apiUrl = 'http://localhost:8085/api/auth';
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient, private cookieService: CookieService) { }
 
   Login(data:any){
     return this.http.post(`${this.apiUrl}/login`,data);
@@ -18,18 +19,21 @@ export class AuthService {
   }
   
   Logout(){
-    return localStorage.removeItem('token');
+    return this.cookieService.delete('token');
   }
 
   isLoggedIn(){
-    return localStorage.getItem('token') != null;
+    return this.cookieService.get('token');
   }
 
-  getUserDetails(token:any){
-    // check if the cookie matches the token
+  getUserDetails(){
+    // check if the cookie matches the token in the cookie
+    // if it matches, return the user details
+    // else return null
     return this.http.get(`${this.apiUrl}/user`,{
-      headers:{
-        Authorization:token
+      withCredentials: true,
+      headers: {
+        'Authorization': `Bearer ${this.cookieService.get('token')}`
       }
     });
   }
